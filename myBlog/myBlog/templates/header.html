@@ -9,7 +9,7 @@
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             {% if not perms.myBlog_app.add_thread%}
-                <a class="nav-link disabled" href="{% url 'myBlog:new' %}">New thread</a>
+                <a class="nav-link disabled" href="{% url 'myBlog:new' %}"></a>
             {% else %}
                 <a class="nav-link" href="{% url 'myBlog:new' %}">New thread</a>
             {% endif %}
