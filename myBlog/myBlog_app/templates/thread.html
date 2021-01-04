@@ -1,0 +1,41 @@
+{% extends 'master.html' %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h1>
+                {{ thread.title }}
+                {% if perms.myBlog_app.change_thread or thread.owner.username == user.get_username %}
+                    <a href="{% url 'myBlog:edit' thread.id %}">
+                        <span class="badge badge-primary">Edit</span>
+                    </a>
+                {% endif %}
+            </h1>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>{{ thread.content }}</p>
+                <footer class="blockquote-footer">
+                    Author:
+                    <cite title="Source Title">
+                        {{ thread.owner.username }}
+                    </cite>
+                </footer>
+            </blockquote>
+            <div>
+                <h3>Comments</h3>
+                <form action="{% url 'myBlog:postComment' thread.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Post Comment: </label>
+                    <input type="text" name="comment" placeholder="Enter comment here">
+                </div>
+                <input type="hidden" name="thread" value="{{thread.id}}" >
+                <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

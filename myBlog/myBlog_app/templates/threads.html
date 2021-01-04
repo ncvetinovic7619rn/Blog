@@ -1,0 +1,15 @@
+{%  extends 'master.html' %}
+
+{% block title %}
+    Threads
+{% endblock %}
+
+{%  block content %}
+    <div class="list-group">
+        {% for thread in threads %}
+            <a class="list-group-item list-group-item-action" href="{% url 'myBlog:thread' thread.id %}">
+                {{ thread.title }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

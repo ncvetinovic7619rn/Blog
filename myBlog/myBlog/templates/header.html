@@ -1,0 +1,25 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'myBlog:threads' %}">
+        <img src="{% static 'img/rocket.png' %}" width="30" height="30" class="d-inline-block align-top" alt="logo"/>
+        MyBlog
+    </a>
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            {% if not perms.myBlog_app.add_thread%}
+                <a class="nav-link disabled" href="{% url 'myBlog:new' %}">New thread</a>
+            {% else %}
+                <a class="nav-link" href="{% url 'myBlog:new' %}">New thread</a>
+            {% endif %}
+        </li>
+    </ul>
+
+    {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'logout' %}">Logout {{ user.get_username }}</a>
+    {% else %}
+        <a class="nav-link" href = "{% url 'myBlog:sign_up' %}">Sign Up</a>
+    {% endif %}
+
+</nav>
