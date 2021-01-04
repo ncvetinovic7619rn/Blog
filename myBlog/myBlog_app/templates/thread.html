@@ -6,7 +6,7 @@
         <div class="card-header">
             <h1>
                 {{ thread.title }}
-                {% if perms.myBlog_app.change_thread or thread.owner.username == user.get_username %}
+                {% if perms.myBlog_app.change_thread%}
                     <a href="{% url 'myBlog:edit' thread.id %}">
                         <span class="badge badge-primary">Edit</span>
                     </a>
@@ -24,15 +24,23 @@
                 </footer>
             </blockquote>
             <div>
-                <h3>Comments</h3>
+                <h3>Send your opinion about this blog</h3>
                 <form action="{% url 'myBlog:postComment' thread.id %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Post Comment: </label>
-                    <input type="text" name="comment" placeholder="Enter comment here">
-                </div>
-                <input type="hidden" name="thread" value="{{thread.id}}" >
-                <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.comment.id_for_label}}">{{ form.comment.label_tag }}</label>
+                        <textarea class = "form-control" id ="{{ form.comment.id_for_comment }}"name="{{ form.comment.name }}" placeholder="Enter comment here" rows='3'></textarea>
+                        {% if form.comment.errors %}
+                            <div class="alert alert-danger">
+                                <ul style="text-align: left">
+                                    {% for error in form.comment.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
                 </form>
             </div>
         </div>

@@ -25,7 +25,7 @@ def threads(request):
 	tmp = Thread.objects.all()
 	return render(request, 'threads.html',{'threads': tmp})
 
-@permission_required('myBlog.add_thread')
+@permission_required('myBlog_app.add_thread')
 def new(request):
 	if request.method =='POST':
 		form = ThreadForm(request.POST)
@@ -39,7 +39,7 @@ def new(request):
 		form = ThreadForm()
 		return render(request, 'new.html',{'form':form})
 
-@permission_required('myBlog.change_thread')
+@permission_required('myBlog_app.change_thread')
 def edit(request, id):
 	if request.method == 'POST':
 		form = ThreadForm(request.POST)
@@ -70,18 +70,16 @@ def sign_up(request):
 
 @login_required
 def postComment(request, id):
-	form = CommentForm(request.POST.get('comment'))
-	tmp = get_object_or_404(Thread, id=id)
 	if request.method =='POST':
-		if request.POST.get('comment'):
-			user = request.user
-			comm = request.POST.get('comment')
-			t = Thread.objects.get(id=id)
-			comment = Comment(comment = comm,thread = t,user=user)
+		tmp = get_object_or_404(Thread, id=id)
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = Comment(comment = form.cleaned_data['comment'],thread = tmp,user=request.user)
 			comment.save()
 			messages.success(request,"Your comment has been posted successfully")
+			return redirect('myBlog:threads')
 		else:
-			return render(request,'thread.html', {'id':id})
+			return render(request, 'thread.html', {'thread': tmp, 'page_title' : tmp.title, 'form':form , 'id':id})
 	return render(request, 'thread.html', {'thread': tmp, 'page_title' : tmp.title})
 		
 
